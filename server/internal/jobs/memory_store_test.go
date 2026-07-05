@@ -7,8 +7,7 @@ func TestGetJob(t *testing.T) {
 
 	store.Create(job)
 
-	_, err := store.Get(job.ID)
-	if err != nil {
+	if _, err := store.Get(job.ID); err != nil {
 		t.Errorf("store.GET(%q) did not return the correct job", job.ID)
 	}
 }
@@ -16,8 +15,7 @@ func TestGetJob(t *testing.T) {
 func TestGetJobNotFount(t *testing.T) {
 	_, store := MemoryStoreSetup()
 
-	_, err := store.Get("unknown")
-	if err == nil {
+	if _, err := store.Get("unknown"); err == nil {
 		t.Errorf("Store did not throw expected error")
 	}
 }
@@ -25,13 +23,11 @@ func TestGetJobNotFount(t *testing.T) {
 func TestCreateJobAlreadyExists(t *testing.T) {
 	job, store := MemoryStoreSetup()
 
-	err1 := store.Create(job)
-	if err1 != nil {
+	if err := store.Create(job); err != nil {
 		t.Errorf("Store failed to create Job")
 	}
 
-	err2 := store.Create(job)
-	if err2 == nil {
+	if err := store.Create(job); err == nil {
 		t.Errorf("Store did not throw error when creating job twice")
 	}
 }
@@ -45,8 +41,7 @@ func TestUpdateJob(t *testing.T) {
 	job.Status = JobSucceeded
 	store.Update(job)
 
-	jobFromStore, _ := store.Get(job.ID)
-	if jobFromStore.Status != JobSucceeded {
+	if jobFromStore, _ := store.Get(job.ID); jobFromStore.Status != JobSucceeded {
 		t.Errorf("Job has incorrect status %q", job.Status)
 	}
 }
